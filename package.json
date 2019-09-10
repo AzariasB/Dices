@@ -9,7 +9,9 @@
   },
   "author": "AzariasB",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "materialize-css": "^1.0.0-rc.2"
+  },
   "devDependencies": {
     "css-loader": "^3.2.0",
     "html-webpack-plugin": "^3.2.0",
