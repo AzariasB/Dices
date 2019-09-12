@@ -11,14 +11,28 @@
         <div class="col s12">
             <h1>Dices</h1>
         </div>
-        <div class="col s12">
-            <div class="file-upload btn waves-effect waves-light">
-                <span>Import picture</span>
-                <i class="material-icons right">cloud_upload</i>
-                <input type="file" name="FileAttachment" id="FileAttachment" class="upload"
-                    accept="image/png, image/jpeg" />
+        <div class="row">
+            <div class="col s3">
+                <div class="file-upload btn waves-effect waves-light">
+                    <span>Import picture</span>
+                    <i class="material-icons right">cloud_upload</i>
+                    <input type="file" name="FileAttachment" id="FileAttachment" class="upload"
+                        accept="image/png, image/jpeg" />
+                </div>
+                <input type="text" id="fileuploadurl" readonly placeholder="Maximum file size is 1GB">
             </div>
-            <input type="text" id="fileuploadurl" readonly placeholder="Maximum file size is 1GB">
+            <div class="col s3">
+                <form action="#">
+                    <p class="range-field">
+                        <input type="range" id="maxSize" min="50" max="300" />
+                    </p>
+                    <span class="thumb"></span>
+                </form>
+            </div>
+            <div class="col s3">
+                <p>Width : <span id="widthSpan"></span> </p>
+                <p>Height : <span id="heightSpan"></span> </p>
+            </div>
         </div>
         <div class="row">
             <div class="col s12">

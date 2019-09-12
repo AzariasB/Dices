@@ -1,10 +1,8 @@
 import './less/style.less'
 
+import * as M from 'materialize-css';
 import { toDiceFaces, drawDiceFace, DICE_SIDE } from './DiceTransformer';
 
-
-const SIDE_1 = 100;
-const SIDE_2 = 150;
 
 document.addEventListener('DOMContentLoaded', (ev) => init());
 
@@ -27,10 +25,11 @@ function drawDices(target, diceData, width) {
 }
 
 function toRatio(width, height) {
+    const side = document.getElementById('maxSize').value;
     if (width > height) {
-        return width / SIDE_2;
+        return width / side;
     }
-    return height / SIDE_2;
+    return height / side;
 
 }
 
@@ -45,16 +44,20 @@ function downloadImage(canvas) {
         link.href = URL.createObjectURL(b);
         link.click();
         requestAnimationFrame(() => {
-            URL.revokeObjectURL(a.href);
+            URL.revokeObjectURL(link.href);
         })
         link.removeAttribute('href');
     })
 }
 
 function init() {
+    M.AutoInit();
+    M.Range.init(document.querySelectorAll("input[type=range]"));
     let canvas = document.getElementById('baseCanvas');
     let target = document.getElementById('downloadCanvas');
     let ctx = canvas.getContext('2d');
+    let spanWidth = document.getElementById('widthSpan');
+    let spanHeight = document.getElementById('heightSpan');
 
     let img = new Image;
 
@@ -62,6 +65,8 @@ function init() {
         let r = toRatio(img.width, img.height);
         let width = Math.floor(img.width / r);
         let height = Math.floor(img.height / r);
+        spanHeight.innerText = height + '';
+        spanWidth.innerText = width + '';
         target.width = DICE_SIDE * (canvas.width = width);
         target.height = DICE_SIDE * (canvas.height = height);
         ctx.drawImage(img, 0, 0, width, height);
