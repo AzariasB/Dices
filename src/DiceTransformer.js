@@ -8,9 +8,6 @@
 export function toDiceFaces(colorInput) {
     let out = [];
 
-    let min = Infinity;
-    let max = - Infinity;
-
     let size = colorInput.width * colorInput.height * 4;
     let data = colorInput.data;
     for (let i = 0; i < size; i += 4) {
@@ -26,7 +23,7 @@ export function toDiceFaces(colorInput) {
 }
 
 
-export const DICE_SIDE = 60;
+export const DICE_SIDE = 30;
 const DICE_MARGIN = 4;
 const DICE_CALC_SIDE = DICE_SIDE - DICE_MARGIN * 2;
 const DICE_UNIT = (DICE_CALC_SIDE / 3) / 2;

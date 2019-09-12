@@ -14,9 +14,9 @@ document.addEventListener('DOMContentLoaded', (ev) => init());
  * @param {number} height 
  */
 function drawDices(target, diceData, width) {
-    let y = 0, x = 0;
-    for (let i = 0; i < diceData.length; ++i) {
-        for (x = 0; x < width - 1; ++x) {
+    let y = 0, x = 0, i = 0;
+    for (; i < diceData.length; ++i) {
+        for (x = 0; x < width; ++x) {
             ++i;
             drawDiceFace(target, x * DICE_SIDE, y, diceData[i]);
         }
@@ -37,7 +37,8 @@ function toRatio(width, height) {
  * 
  * @param {HTMLCanvasElement} canvas canvas
  */
-function downloadImage(canvas) {
+function downloadImage() {
+    let canvas = document.getElementById('downloadCanvas');
     let link = document.createElement('a');
     link.download = 'dices.png';
     canvas.toBlob(b => {
@@ -58,25 +59,46 @@ function init() {
     let ctx = canvas.getContext('2d');
     let spanWidth = document.getElementById('widthSpan');
     let spanHeight = document.getElementById('heightSpan');
+    let totalDice = document.getElementById('totalDices');
+    let btn = document.getElementById('downloadBtn');
+    let range = document.getElementById('maxSize');
+    let previewImg = document.getElementById('previewIMG');
 
-    let img = new Image;
-
-    img.addEventListener('load', function () {
-        let r = toRatio(img.width, img.height);
-        let width = Math.floor(img.width / r);
-        let height = Math.floor(img.height / r);
-        spanHeight.innerText = height + '';
-        spanWidth.innerText = width + '';
-        target.width = DICE_SIDE * (canvas.width = width);
-        target.height = DICE_SIDE * (canvas.height = height);
-        ctx.drawImage(img, 0, 0, width, height);
-        let data = ctx.getImageData(0, 0, width, height);
-        drawDices(target.getContext('2d'), toDiceFaces(data), width);
-        downloadImage(target);
+    btn.addEventListener('click', () => {
+        downloadImage();
     });
+
+
 
     document.getElementById("FileAttachment").addEventListener('change', function (ev) {
         document.getElementById("fileuploadurl").value = this.value.replace(/C:\\fakepath\\/i, '');
+        let img = new Image;
+        range.removeEventListener('change', redrawImage)
+        range.addEventListener('change', redrawImage);
+
+        function redrawImage() {
+            let r = toRatio(img.width, img.height);
+            let width = Math.round(img.width / r);
+            let height = Math.round(img.height / r);
+            spanHeight.innerText = height + '';
+            spanWidth.innerText = width + '';
+            totalDice.innerText = (width * height) + '';
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            target.width = DICE_SIDE * (canvas.width = width);
+            target.height = DICE_SIDE * (canvas.height = height);
+            ctx.drawImage(img, 0, 0, width + 1, height);
+            let data = ctx.getImageData(0, 0, width + 1, height);
+            drawDices(target.getContext('2d'), toDiceFaces(data), width);
+            previewImg.src = target.toDataURL('image/png');
+            previewImg.width = width * 3;
+            previewImg.height = height * 3;
+        }
+
+        img.addEventListener('load', function () {
+            btn.removeAttribute('disabled');
+            redrawImage();
+        });
+
         img.src = URL.createObjectURL(ev.target.files[0]);
     });
 }
